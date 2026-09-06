@@ -1,29 +1,61 @@
 import { Router } from "express";
-// import {
-//   getAllUsers,
-//   getUserById,
-//   insertUser,
-//   updateUser,
-//   deleteUser,
-// } from "../controllers/user.controller.js";
-
-// import { body } from "express-validator";
-// import { validate } from "../middlewares/validate.js";
-// import {
-//   createUserValidation,
-//   deleteUserValidation,
-//   getUserValidation,
-//   updateUserValidation,
-// } from "../middlewares/validations/user.validation.js";
+import {
+  createTag,
+  deleteTag,
+  getAllTags,
+  getTagById,
+  updateTag,
+} from "../controllers/tag.controller.js";
+import { validate } from "../middlewares/validate.js";
+import { authMiddleware } from "../middlewares/validations/authMiddleware.validation.js";
+import { adminMiddleware } from "../middlewares/validations/adminMiddleware.validation.js";
+import {
+  createTagValidation,
+  updateTagValidation,
+  validateTagId,
+} from "../middlewares/validations/tagMiddleware.validation.js";
 
 export const tagRouter = Router();
 
-tagRouter.get("/tags", getAllTags); //Listar todas las etiquetas. (usuario autenticado)
+// POST /api/tags → Crear etiqueta (solo admin)
+tagRouter.post(
+  "/tags",
+  authMiddleware,
+  adminMiddleware,
+  createTagValidation,
+  validate,
+  createTag,
+);
 
-tagRouter.get("/tags/:id", /*getUserValidation, validate,*/ getTagById); //Obtener etiqueta específica con artículos asociados (solo admin).
+// GET /api/tags → Listar todas las etiquetas (usuario autenticado)
+tagRouter.get("/tags", authMiddleware, getAllTags);
 
-tagRouter.post("/tags", /*createUserValidation, validate,*/ insertTag); //Crear etiqueta (solo admin).
+// GET /api/tags/:id → Obtener etiqueta específica con artículos asociados (solo admin)
+tagRouter.get(
+  "/tags/:id",
+  authMiddleware,
+  adminMiddleware,
+  validateTagId,
+  validate,
+  getTagById,
+);
 
-tagRouter.put("/tags/:id", /*updateUserValidation, validate,*/ updateTag); //Actualizar etiqueta (solo admin).
+// PUT /api/tags/:id → Actualizar etiqueta (solo admin)
+tagRouter.put(
+  "/tags/:id",
+  authMiddleware,
+  adminMiddleware,
+  updateTagValidation,
+  validate,
+  updateTag,
+);
 
-tagRouter.delete("/tags/:id", /*deleteUserValidation, validate,*/ deleteTag); //Eliminar etiqueta (solo admin).
+// DELETE /api/tags/:id → Eliminar etiqueta (solo admin)
+tagRouter.delete(
+  "/tags/:id",
+  authMiddleware,
+  adminMiddleware,
+  validateTagId,
+  validate,
+  deleteTag,
+);

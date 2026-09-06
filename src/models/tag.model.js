@@ -8,10 +8,13 @@ export const TagModel = sequelize.define(
       type: DataTypes.STRING(30),
       allowNull: false,
       unique: true,
+      validate: {
+        len: [2, 30],
+      },
     },
   },
   {
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
   },
 );

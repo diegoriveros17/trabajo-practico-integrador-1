@@ -29,13 +29,13 @@ export const ProfileModel = sequelize.define(
       allowNull: false,
       unique: true,
       references: {
-        model: "User",
+        model: "users",
         key: "id",
       },
     },
   },
   {
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
   },
 );

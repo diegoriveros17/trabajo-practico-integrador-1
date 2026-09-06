@@ -18,21 +18,22 @@ import { Router } from "express";
 
 export const articleRouter = Router();
 
-articleRouter.get("/articles", getAllTags); //Listar artículos publicados. (usuario autenticado)
+articleRouter.get("/articles"); //Listar artículos publicados. (usuario autenticado)
 
-articleRouter.get("/articles/:id", /*getUserValidation, validate,*/ getTagById); //Obtener artículo por su id. (usuario autenticado)
+articleRouter.get("/articles/:id" /*getUserValidation, validate,*/); //Obtener artículo por su id. (usuario autenticado)
 
-articleRouter.get("/articles/user", getAllTags); //Listar artículos publicados del usuario logueado. (usuario autenticado)
+articleRouter.get("/articles/user"); //Listar artículos publicados del usuario logueado. (usuario autenticado)
 
-articleRouter.get("/articles/user/:id", /*getUserValidation, validate,*/ getTagById); //Obtener artículo del usuario logueado por su id. (usuario autenticado)
+articleRouter.get("/articles/user/:id" /*getUserValidation, validate,*/); //Obtener artículo del usuario logueado por su id. (usuario autenticado)
 
-articleRouter.post("/articles", /*createUserValidation, validate,*/ insertTag); //Crear artículo. (usuario autenticado)
+articleRouter.post("/articles" /*createUserValidation, validate,*/); //Crear artículo. (usuario autenticado)
 
-articleRouter.put("/articles/:id", /*updateUserValidation, validate,*/ updateTag); //Actualizar artículo (solo autor o admin).
+articleRouter.put("/articles/:id" /*updateUserValidation, validate,*/); //Actualizar artículo (solo autor o admin).
 
-articleRouter.delete("/articles/:id", /*deleteUserValidation, validate,*/ deleteTag); //Eliminación lógica (solo autor o admin).
-
+articleRouter.delete("/articles/:id" /*deleteUserValidation, validate,*/); //Eliminación lógica (solo autor o admin).
 
 // Articles Tags
-articleRouter.post("/articles-tags", /*deleteUserValidation, validate,*/ insertTag); //Agregar etiqueta a artículo. (solo autor)
-articleRouter.delete("/articles-tags/articleTagId", /*deleteUserValidation, validate,*/ insertTag); // Remover etiqueta de artículo. (solo autor)
+articleRouter.post("/articles-tags" /*deleteUserValidation, validate,*/); //Agregar etiqueta a artículo. (solo autor)
+articleRouter.delete(
+  "/articles-tags/articleTagId" /*deleteUserValidation, validate,*/,
+); // Remover etiqueta de artículo. (solo autor)

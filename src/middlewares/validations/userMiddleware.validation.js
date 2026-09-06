@@ -15,6 +15,23 @@ export const createUserValidation = [
   body("password").notEmpty().withMessage("La password no puede estar vacia"),
 ];
 
+export const updateUserValidation = [
+  body("username")
+    .optional()
+    .notEmpty()
+    .withMessage("El username no puede ser vacio"),
+  body("email").optional().isEmail().withMessage("El email debe ser valido"),
+  body("password")
+    .optional()
+    .notEmpty()
+    .withMessage("La password no puede estar vacia"),
+  param("id")
+    .notEmpty()
+    .withMessage("El id no puede ser vacio")
+    .isInt({ min: 1 })
+    .withMessage("El id debe ser un numero entero positivo"),
+];
+
 export const validateUserId = [
   param("id")
     .notEmpty()
