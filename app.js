@@ -1,15 +1,23 @@
+import "dotenv/config";
 import express from "express";
-
-import dotenv from "dotenv";
 import { startDB } from "./src/config/database.js";
-
-dotenv.config();
+import { authRouter } from "./src/routes/auth.routes.js";
+import cookieParser from "cookie-parser";
+import { userRouter } from "./src/routes/user.routes.js";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+//para que el server entienda el formato json
 app.use(express.json());
+
+//necesario para leer las cookies req.cookies
+app.use(cookieParser());
+
+//configuracion de rutas
+app.use("/api", authRouter);
+app.use("/api", userRouter);
 
 app.listen(PORT, async () => {
   await startDB();
