@@ -29,7 +29,7 @@ import {
 
 export const articleRouter = Router();
 
-// POST /api/articles → Crear artículo. (usuario autenticado)
+// Crear artículo. (usuario autenticado)
 articleRouter.post(
   "/articles",
   authMiddleware,
@@ -38,13 +38,13 @@ articleRouter.post(
   createArticle,
 );
 
-// GET /api/articles → Listar artículos publicados. (usuario autenticado)
+// Listar artículos publicados. (usuario autenticado)
 articleRouter.get("/articles", authMiddleware, getPublishedArticles);
 
-// GET /api/articles/user → Listar artículos publicados del usuario logueado. (usuario autenticado)
+// Listar artículos publicados del usuario logueado. (usuario autenticado)
 articleRouter.get("/articles/user", authMiddleware, getMyPublishedArticles);
 
-// GET /api/articles/user/:id → Obtener artículo del usuario logueado por su id. (usuario autenticado)
+// Obtener artículo del usuario logueado por su id. (usuario autenticado)
 articleRouter.get(
   "/articles/user/:id",
   authMiddleware,
@@ -53,7 +53,7 @@ articleRouter.get(
   getMyArticleById,
 );
 
-// GET /api/articles/:id → Obtener artículo por su id. (usuario autenticado)
+// Obtener artículo por su id. (usuario autenticado)
 articleRouter.get(
   "/articles/:id",
   authMiddleware,
@@ -62,7 +62,7 @@ articleRouter.get(
   getArticleById,
 );
 
-// PUT /api/articles/:id → Actualizar artículo (solo autor o admin)
+// Actualizar artículo (solo autor o admin)
 articleRouter.put(
   "/articles/:id",
   authMiddleware,
@@ -74,7 +74,7 @@ articleRouter.put(
   updateArticle,
 );
 
-// DELETE /api/articles/:id → Eliminación en cascada (solo autor o admin)
+// Eliminación en cascada (solo autor o admin)
 articleRouter.delete(
   "/articles/:id",
   authMiddleware,
@@ -85,7 +85,7 @@ articleRouter.delete(
 );
 
 // Articles Tags:
-// POST /api/articles-tags → Agregar etiqueta a artículo. (solo autor)
+// Agregar etiqueta a artículo. (solo autor)
 articleRouter.post(
   "/articles-tags",
   authMiddleware,
@@ -95,7 +95,7 @@ articleRouter.post(
   addTagToArticle,
 );
 
-// DELETE /api/articles-tags/:articleTagId → Remover etiqueta de artículo. (solo autor)
+// Remover etiqueta de artículo. (solo autor)
 articleRouter.delete(
   "/articles-tags/:articleTagId",
   authMiddleware,

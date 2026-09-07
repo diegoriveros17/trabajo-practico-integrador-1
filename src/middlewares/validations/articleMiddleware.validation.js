@@ -23,7 +23,7 @@ export const createArticleValidation = [
     .isLength({ min: 50 })
     .withMessage("El contenido debe tener al menos 50 caracteres"),
   body("excerpt")
-    .optional({ nullable: true })
+    .optional()
     .trim()
     .isLength({ max: 500 })
     .withMessage("El extracto (excerpt) no puede superar los 500 caracteres"),
@@ -34,7 +34,20 @@ export const createArticleValidation = [
   body("user_id")
     .optional()
     .isInt()
-    .withMessage("user_id debe ser un entero válido"),
+    .withMessage("user_id debe ser un entero válido")
+    .custom(async (user_id, { req }) => {
+      const user = await UserModel.findByPk(user_id);
+      if (!user) {
+        throw new Error("El usuario especificado en no existe");
+      }
+      // Si no es admin, debe coincidir con el usuario autenticado
+      const dataUser = req.userData.idUser;
+      // console.log(dataUser)
+      if (dataUser.role !== "admin" && user_id !== dataUser.id) {
+        throw new Error("El usuario no coincide con el usuario autenticado");
+      }
+      return true;
+    }),
 ];
 
 export const updateArticleValidation = [
@@ -58,7 +71,7 @@ export const updateArticleValidation = [
     .isLength({ min: 50 })
     .withMessage("El contenido debe tener al menos 50 caracteres"),
   body("excerpt")
-    .optional({ nullable: true })
+    .optional()
     .trim()
     .isLength({ max: 500 })
     .withMessage("El extracto no puede superar los 500 caracteres"),

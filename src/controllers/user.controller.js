@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.model.js";
 import { ProfileModel } from "../models/profile.model.js";
 import { hashPassword } from "../helpers/bcrypt.helper.js";
 import { Op } from "sequelize";
+import { ArticleModel } from "../models/article.model.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -22,7 +23,7 @@ export const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      message: `Error interno del servidor al listar usuarios: ${error.message}`,
+      message: `Error interno del servidor: ${error.message}`,
     });
   }
 };

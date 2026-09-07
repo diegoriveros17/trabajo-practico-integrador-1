@@ -8,13 +8,15 @@ import {
 
 export const createArticle = async (req, res) => {
   try {
-    const currentUserId = req.user?.id || req.user?.idUser?.id;
+    const userId = req.userData.idUser.id;
     const { title, content, excerpt, status, user_id } = matchedData(req, {
       locations: ["body"],
     });
 
+    // console.log(userId)
+
     const finalUserId =
-      req.user?.role === "admin" && user_id ? user_id : currentUserId;
+      req.userData.idUser.role === "admin" && user_id ? user_id : userId;
 
     const article = await ArticleModel.create({
       title,

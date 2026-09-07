@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.model.js";
 import { hashPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { generateToken } from "../helpers/jwt.helper.js";
 import { Op } from "sequelize";
+import { ProfileModel } from "../models/profile.model.js";
 
 export const login = async (req, res) => {
   try {
@@ -47,7 +48,7 @@ export const login = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password, role } = matchedData(req, {
+    const { username, email, password, first_name, last_name } = matchedData(req, {
       locations: ["body"],
     });
 
@@ -65,14 +66,19 @@ export const register = async (req, res) => {
       });
     }
 
-    await UserModel.create({
+    const newUser = await UserModel.create({
       username,
       email,
       password: passwordHashed,
-      role,
     });
 
-    return res.status(201).json({ message: `Usuario creado correctamente` });
+    await ProfileModel.create({
+      first_name,
+      last_name,
+      user_id: newUser.id,
+    });
+
+    return res.status(201).json({ message: `Usuario registrado correctamente` });
   } catch (error) {
     return res
       .status(500)
@@ -83,4 +89,63 @@ export const register = async (req, res) => {
 export const logout = async (req, res) => {
   res.clearCookie("token"); //Eliminar cookie del navegador
   return res.json({ message: `Has cerrado sesion` });
+};
+
+
+export const getProfile = async (req, res) => {
+  try {
+    const userId = req.user?.id || req.user?.idUser?.id;
+
+    const user = await UserModel.findByPk(userId, {
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: ProfileModel,
+          as: "profile",
+        },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Usuario no encontrado",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Perfil obtenido",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error interno del servidor: ${error}`,
+    });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user?.id || req.user?.idUser?.id;
+    const profileData = matchedData(req, { locations: ["body"] });
+
+    let profile = await ProfileModel.findOne({ where: { user_id: userId } });
+
+    if (!profile) {
+      profile = await ProfileModel.create({
+        ...profileData,
+        user_id: userId,
+      });
+    } else {
+      await profile.update(profileData);
+    }
+
+    return res.status(200).json({
+      message: "Perfil actualizado correctamente",
+      profile,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error interno del servidor: ${error.message}`,
+    });
+  }
 };

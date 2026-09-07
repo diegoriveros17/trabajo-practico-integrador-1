@@ -13,6 +13,8 @@ export const createUserValidation = [
     .isEmail()
     .withMessage("El email debe ser valido"),
   body("password").notEmpty().withMessage("La password no puede estar vacia"),
+  body("first_name").notEmpty().withMessage("El nombre no puede ser vacio"),
+  body("last_name").notEmpty().withMessage("El apellido no puede ser vacio")
 ];
 
 export const updateUserValidation = [
