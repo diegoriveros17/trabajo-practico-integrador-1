@@ -2,13 +2,13 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
 
 export const ArticleTagModel = sequelize.define(
-  "Article_Tag",
+  "ArticleTag",
   {
     article_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Article",
+        model: "articles",
         key: "id",
       },
     },
@@ -16,13 +16,13 @@ export const ArticleTagModel = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Tag",
+        model: "tags",
         key: "id",
       },
     },
   },
   {
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
   },
 );

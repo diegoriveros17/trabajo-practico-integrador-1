@@ -15,7 +15,7 @@ export const ArticleModel = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        len: [50, Infinity],
+        len: [50, 100000],
       },
     },
     excerpt: {
@@ -23,25 +23,21 @@ export const ArticleModel = sequelize.define(
       allowNull: true,
     },
     status: {
-      type: DataTypes.ENUM("published", "archived", { default: "published" }),
+      type: DataTypes.ENUM("published", "archived"),
       allowNull: false,
-    },
-    birth_date: {
-      type: DataTypes.DATE,
-      allowNull: true,
+      defaultValue: "published",
     },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
       references: {
-        model: "User",
+        model: "users",
         key: "id",
       },
     },
   },
   {
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
   },
 );

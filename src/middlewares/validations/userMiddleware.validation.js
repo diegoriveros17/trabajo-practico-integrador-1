@@ -28,7 +28,7 @@ export const updateUserValidation = [
   param("id")
     .notEmpty()
     .withMessage("El id no puede ser vacio")
-    .isInt({ min: 1 })
+    .isInt()
     .withMessage("El id debe ser un numero entero positivo"),
 ];
 
