@@ -17,7 +17,7 @@ import {
 
 export const tagRouter = Router();
 
-// POST /api/tags → Crear etiqueta (solo admin)
+// Crear etiqueta (solo admin)
 tagRouter.post(
   "/tags",
   authMiddleware,
@@ -27,10 +27,10 @@ tagRouter.post(
   createTag,
 );
 
-// GET /api/tags → Listar todas las etiquetas (usuario autenticado)
+// Listar todas las etiquetas (usuario autenticado)
 tagRouter.get("/tags", authMiddleware, getAllTags);
 
-// GET /api/tags/:id → Obtener etiqueta específica con artículos asociados (solo admin)
+// Obtener etiqueta específica con artículos asociados (solo admin)
 tagRouter.get(
   "/tags/:id",
   authMiddleware,
@@ -40,7 +40,7 @@ tagRouter.get(
   getTagById,
 );
 
-// PUT /api/tags/:id → Actualizar etiqueta (solo admin)
+// Actualizar etiqueta (solo admin)
 tagRouter.put(
   "/tags/:id",
   authMiddleware,
@@ -50,7 +50,7 @@ tagRouter.put(
   updateTag,
 );
 
-// DELETE /api/tags/:id → Eliminar etiqueta (solo admin)
+//Eliminar etiqueta (solo admin)
 tagRouter.delete(
   "/tags/:id",
   authMiddleware,

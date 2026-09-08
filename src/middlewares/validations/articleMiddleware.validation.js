@@ -38,7 +38,7 @@ export const createArticleValidation = [
     .custom(async (user_id, { req }) => {
       const user = await UserModel.findByPk(user_id);
       if (!user) {
-        throw new Error("El usuario especificado en no existe");
+        throw new Error("El usuario especificado no existe");
       }
       // Si no es admin, debe coincidir con el usuario autenticado
       const dataUser = req.userData.idUser;

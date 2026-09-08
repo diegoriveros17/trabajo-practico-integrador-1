@@ -48,9 +48,12 @@ export const login = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password, first_name, last_name } = matchedData(req, {
-      locations: ["body"],
-    });
+    const { username, email, password, first_name, last_name } = matchedData(
+      req,
+      {
+        locations: ["body"],
+      },
+    );
 
     const passwordHashed = await hashPassword(password);
 
@@ -78,7 +81,9 @@ export const register = async (req, res) => {
       user_id: newUser.id,
     });
 
-    return res.status(201).json({ message: `Usuario registrado correctamente` });
+    return res
+      .status(201)
+      .json({ message: `Usuario registrado correctamente` });
   } catch (error) {
     return res
       .status(500)
@@ -91,10 +96,9 @@ export const logout = async (req, res) => {
   return res.json({ message: `Has cerrado sesion` });
 };
 
-
 export const getProfile = async (req, res) => {
   try {
-    const userId = req.user?.id || req.user?.idUser?.id;
+    const userId = req.userData.idUser.id;
 
     const user = await UserModel.findByPk(userId, {
       attributes: { exclude: ["password"] },
@@ -125,7 +129,7 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const userId = req.user?.id || req.user?.idUser?.id;
+    const userId = req.userData.idUser.id;
     const profileData = matchedData(req, { locations: ["body"] });
 
     let profile = await ProfileModel.findOne({ where: { user_id: userId } });

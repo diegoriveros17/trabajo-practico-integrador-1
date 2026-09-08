@@ -15,7 +15,7 @@ export const createArticle = async (req, res) => {
 
     // console.log(userId)
 
-    const finalUserId =
+    const idUser =
       req.userData.idUser.role === "admin" && user_id ? user_id : userId;
 
     const article = await ArticleModel.create({
@@ -23,7 +23,7 @@ export const createArticle = async (req, res) => {
       content,
       excerpt,
       status,
-      user_id: finalUserId,
+      user_id: idUser,
     });
 
     const articleWithAuthor = await ArticleModel.findByPk(article.id, {
@@ -31,7 +31,7 @@ export const createArticle = async (req, res) => {
         {
           model: UserModel,
           as: "author",
-          attributes: ["id", "username", "email", "role"],
+          attributes: ["username", "email", "role"],
         },
         {
           model: TagModel,
@@ -56,11 +56,14 @@ export const getPublishedArticles = async (req, res) => {
   try {
     const articles = await ArticleModel.findAll({
       where: { status: "published" },
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "deletedAt", "user_id"],
+      },
       include: [
         {
           model: UserModel,
           as: "author",
-          attributes: ["id", "username", "email", "role"],
+          attributes: ["username", "email"],
         },
         {
           model: TagModel,
@@ -83,14 +86,17 @@ export const getPublishedArticles = async (req, res) => {
 
 export const getArticleById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req, { locations: ["params"] });
 
     const article = await ArticleModel.findByPk(id, {
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "deletedAt", "user_id"],
+      },
       include: [
         {
           model: UserModel,
           as: "author",
-          attributes: ["id", "username", "email", "role"],
+          attributes: ["username", "email"],
         },
         {
           model: TagModel,
@@ -119,18 +125,21 @@ export const getArticleById = async (req, res) => {
 
 export const getMyPublishedArticles = async (req, res) => {
   try {
-    const currentUserId = req.user?.id || req.user?.idUser?.id;
+    const userId = req.userData.idUser.id;
 
     const articles = await ArticleModel.findAll({
       where: {
-        user_id: currentUserId,
+        user_id: userId,
         status: "published",
+      },
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "deletedAt", "user_id"],
       },
       include: [
         {
           model: UserModel,
           as: "author",
-          attributes: ["id", "username", "email", "role"],
+          attributes: ["username", "email"],
         },
         {
           model: TagModel,
@@ -153,19 +162,22 @@ export const getMyPublishedArticles = async (req, res) => {
 
 export const getMyArticleById = async (req, res) => {
   try {
-    const currentUserId = req.user?.id || req.user?.idUser?.id;
-    const { id } = req.params;
+    const userId = req.userData.idUser.id;
+    const { id } = matchedData(req, { locations: ["params"] });
 
     const article = await ArticleModel.findOne({
       where: {
         id,
-        user_id: currentUserId,
+        user_id: userId,
+      },
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "deletedAt", "user_id"],
       },
       include: [
         {
           model: UserModel,
           as: "author",
-          attributes: ["id", "username", "email", "role"],
+          attributes: ["username", "email"],
         },
         {
           model: TagModel,
@@ -195,7 +207,7 @@ export const getMyArticleById = async (req, res) => {
 
 export const updateArticle = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req, { locations: ["params"] });
     const data = matchedData(req, { locations: ["body"] });
 
     const article = await ArticleModel.findByPk(id);
@@ -208,11 +220,14 @@ export const updateArticle = async (req, res) => {
     await article.update(data);
 
     const updatedArticle = await ArticleModel.findByPk(id, {
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "deletedAt", "user_id"],
+      },
       include: [
         {
           model: UserModel,
           as: "author",
-          attributes: ["id", "username", "email", "role"],
+          attributes: ["username", "email"],
         },
         {
           model: TagModel,
@@ -235,7 +250,7 @@ export const updateArticle = async (req, res) => {
 
 export const deleteArticle = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req, { locations: ["params"] });
 
     const article = await ArticleModel.findByPk(id);
     if (!article) {

@@ -8,11 +8,12 @@ import { ArticleModel } from "../models/article.model.js";
 export const getAllUsers = async (req, res) => {
   try {
     const users = await UserModel.findAll({
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ["password", "id", "createdAt", "updatedAt"] },
       include: [
         {
           model: ProfileModel,
           as: "profile",
+          attributes: { exclude: ["id", "user_id", "createdAt", "updatedAt"] },
         },
       ],
     });
@@ -23,7 +24,7 @@ export const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      message: `Error interno del servidor: ${error.message}`,
+      message: `Error interno del servidor: ${error}`,
     });
   }
 };
@@ -33,11 +34,12 @@ export const getUserById = async (req, res) => {
     const { id } = matchedData(req, { locations: ["params"] });
 
     const user = await UserModel.findByPk(id, {
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ["password", "id", "createdAt", "updatedAt"] },
       include: [
         {
           model: ProfileModel,
           as: "profile",
+          attributes: { exclude: ["id", "user_id", "createdAt", "updatedAt"] },
         },
         {
           model: ArticleModel,
@@ -58,7 +60,7 @@ export const getUserById = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      message: `Error interno del servidor al obtener usuario: ${error.message}`,
+      message: `Error interno del servidor al obtener usuario: ${error}`,
     });
   }
 };
@@ -119,7 +121,7 @@ export const insertUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { username, email, password } = matchedData(req, {
+    const userData = matchedData(req, {
       locations: ["body"],
     });
 
@@ -129,12 +131,16 @@ export const updateUser = async (req, res) => {
 
     const userExist = await UserModel.findByPk(id);
 
+    if (userData.password) {
+      userData.password = await hashPassword(userData.password);
+    }
+
     if (!userExist) {
       return res
         .status(404)
         .json({ message: "El usuario que intenta modificar no existe" });
     }
-    const user = await userExist.update();
+    const user = await userExist.update(userData);
     return res.status(200).json({
       message: "Usuario modificado",
     });

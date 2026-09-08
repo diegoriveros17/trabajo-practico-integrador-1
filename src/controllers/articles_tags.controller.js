@@ -21,6 +21,9 @@ export const addTagToArticle = async (req, res) => {
     });
 
     const articleWithTags = await ArticleModel.findByPk(article_id, {
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "deletedAt", "user_id"],
+      },
       include: [
         {
           model: TagModel,
