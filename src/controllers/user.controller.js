@@ -8,7 +8,7 @@ import { ArticleModel } from "../models/article.model.js";
 export const getAllUsers = async (req, res) => {
   try {
     const users = await UserModel.findAll({
-      attributes: { exclude: ["password", "id", "createdAt", "updatedAt"] },
+      attributes: { exclude: ["password", "id", "createdAt", "updatedAt", "deletedAt"] },
       include: [
         {
           model: ProfileModel,
@@ -34,7 +34,7 @@ export const getUserById = async (req, res) => {
     const { id } = matchedData(req, { locations: ["params"] });
 
     const user = await UserModel.findByPk(id, {
-      attributes: { exclude: ["password", "id", "createdAt", "updatedAt"] },
+      attributes: { exclude: ["password", "id", "createdAt", "updatedAt", "deletedAt"] },
       include: [
         {
           model: ProfileModel,
