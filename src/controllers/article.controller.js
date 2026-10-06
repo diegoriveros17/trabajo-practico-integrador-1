@@ -13,8 +13,6 @@ export const createArticle = async (req, res) => {
       locations: ["body"],
     });
 
-    // console.log(userId)
-
     const idUser =
       req.userData.idUser.role === "admin" && user_id ? user_id : userId;
 
