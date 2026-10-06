@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import { UserModel } from "../../models";
+import { UserModel } from "../../models/index.js";
 
 export const loginUserValidation = [
   body("username").notEmpty().withMessage("El username no puede ser vacio"),
@@ -14,7 +14,9 @@ export const createUserValidation = [
     .isLength({ min: 3, max: 20 })
     .withMessage("El nombre de usuario debe tener entre 3 y 20 caracteres")
     .matches(/^[a-zA-Z0-9]+$/)
-    .withMessage("El nombre de usuario solo puede contener caracteres alfanuméricos")
+    .withMessage(
+      "El nombre de usuario solo puede contener caracteres alfanuméricos",
+    )
     .custom(async (username) => {
       const user = await UserModel.findOne({ where: { username } });
       if (user) {
@@ -83,7 +85,9 @@ export const updateUserValidation = [
     .isLength({ min: 3, max: 20 })
     .withMessage("El nombre de usuario debe tener entre 3 y 20 caracteres")
     .matches(/^[a-zA-Z0-9]+$/)
-    .withMessage("El nombre de usuario solo puede contener caracteres alfanuméricos")
+    .withMessage(
+      "El nombre de usuario solo puede contener caracteres alfanuméricos",
+    )
     .custom(async (username) => {
       const user = await UserModel.findOne({ where: { username } });
       if (user) {

@@ -39,17 +39,15 @@ export const createArticleValidation = [
     .isIn(["published", "archived"])
     .withMessage("El estado solo puede ser 'published' o 'archived'"),
   body("user_id")
-    .optional()
     .isInt({ min: 1 })
     .withMessage("El valor de user_id debe ser un número entero positivo")
     .custom(async (user_id) => {
-
       const user = await UserModel.findByPk(user_id);
       if (!user) {
         throw new Error("El usuario especificado no existe");
       }
 
-      const userData = req.user.idUser;
+      const userData = user;
       if (userData.role !== "admin" && user_id !== userData.id) {
         throw new Error("El usuario no coincide con el usuario autenticado");
       }
@@ -127,6 +125,6 @@ export const validateArticleTagId = [
   param("articleTagId")
     .notEmpty()
     .withMessage("El articleTagId es obligatorio")
-    .isInt({ min:})
+    .isInt({ min: 1 })
     .withMessage("El articleTagId debe ser un número entero positivo"),
 ];
