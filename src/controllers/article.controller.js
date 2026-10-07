@@ -55,7 +55,7 @@ export const getPublishedArticles = async (req, res) => {
     const articles = await ArticleModel.findAll({
       where: { status: "published" },
       attributes: {
-        exclude: ["id", "createdAt", "updatedAt", "deletedAt", "user_id"],
+        exclude: ["createdAt", "updatedAt", "deletedAt", "user_id"],
       },
       include: [
         {
