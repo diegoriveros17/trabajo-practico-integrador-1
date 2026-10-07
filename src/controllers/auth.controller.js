@@ -38,7 +38,7 @@ export const login = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: `Bienvenido, ${userExist.username}` });
+      .json({ message: `Bienvenido, ${userExist.username}`, token });
   } catch (error) {
     return res
       .status(500)

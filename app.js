@@ -7,10 +7,17 @@ import { authRouter } from "./src/routes/auth.routes.js";
 import { userRouter } from "./src/routes/user.routes.js";
 import { articleRouter } from "./src/routes/article.routes.js";
 import { tagRouter } from "./src/routes/tag.routes.js";
+import cors from "cors";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 //para que el server entienda el formato json
 app.use(express.json());
